@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
     })
 })
 
+//Database
+const sequelize = new Sequelize(`process.env.DB_Connection`)
 // LISTEN
 app.listen(process.env.PORT, () => {
     console.log(`🎸 Rockin' on port: ${process.env.PORT}`)
