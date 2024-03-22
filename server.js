@@ -2,15 +2,7 @@
 const express = require('express')
 const app = express()
 const {Sequelize}= require('sequelize')
-const testSequelize = async ()=>{
-    try{
-        await sequelize.authenticate();
-        console.log('Database connection has been established successfully, right on brother');
-    }
-    catch(error){
-        console.error('Unable to connect to the database:', error);
-    }
-}
+
 
 // CONFIGURATION / MIDDLEWARE
 require('dotenv').config()
@@ -24,9 +16,26 @@ app.get('/', (req, res) => {
     })
 })
 
-//Database
-const sequelize = new Sequelize(process.env.DB_CONNECTION)
+// CONTROLLERS 
+const bandsController = require('./controllers/bands_controller')
+app.use('/bands', bandsController)
 
+const stagesController = require('./controllers/stages_controller')
+app.use('/stages', stagesController)
+
+const eventsController = require('./controllers/events_controller')
+app.use('/events', eventsController)
+
+
+//Database
+const {sequelize} = require('./models')
+const testSequelize = async ()=>{
+    try{await sequelize.authenticate();
+    console.log('Connection has been established')}
+    catch(error){
+        console.log('unable to connect to database', error)
+    }
+}
 // LISTEN
 app.listen(process.env.PORT, async () => {
     await testSequelize()
